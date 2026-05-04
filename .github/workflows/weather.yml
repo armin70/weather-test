@@ -1,17 +1,18 @@
 name: Update Weather Data
 
 on:
-  workflow_dispatch:        # اجرای دستی (برای تست)
+  workflow_dispatch
+
 jobs:
   update-weather:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v5
         with:
           python-version: "3.10"
 
@@ -20,3 +21,11 @@ jobs:
 
       - name: Run weather script
         run: python update_weather.py
+
+      - name: Commit files
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git commit -m "update weather data" || echo "no changes"
+          git push
